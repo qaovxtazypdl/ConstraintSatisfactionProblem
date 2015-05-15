@@ -21,4 +21,6 @@ protected:
 	//constraint checking
 	virtual bool isAssignComplete();
 	virtual bool checkConstraints();
+
+	virtual Variable& getVariable(const std::pair<int, int> &idx);
 };

@@ -13,6 +13,5 @@ protected:
 	virtual void assignValue(const std::pair<int, int> &idx, const int &value);
 	virtual void removeAssign(const std::pair<int, int> &idx);
 	virtual const std::pair<int, int> selectNextVariable();
-	virtual Variable& getVariable(const std::pair<int, int> &idx);
 	virtual const std::vector<int> getValueOrder(const std::pair<int, int> &idx);
 };

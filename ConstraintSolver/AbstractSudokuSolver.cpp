@@ -29,6 +29,10 @@ bool AbstractSudokuSolver::checkConstraints() {
 	return true;
 }
 
+AbstractSudokuSolver::Variable& AbstractSudokuSolver::getVariable(const std::pair<int, int> &idx) {
+	return grid[idx.first][idx.second];
+}
+
 std::ostream &operator<<(std::ostream &out, const AbstractSudokuSolver &puzzle) {
 	for (int i = 0; i < AbstractSudokuSolver::GRID_WIDTH; i++) {
 		for (int j = 0; j < AbstractSudokuSolver::GRID_HEIGHT; j++) {

@@ -22,10 +22,6 @@ void SudokuSolver_Basic::removeAssign(const std::pair<int, int> &idx) {
 	assignedCount--;
 }
 
-SudokuSolver_Basic::Variable& SudokuSolver_Basic::getVariable(const std::pair<int, int> &idx) {
-	return grid[idx.first][idx.second];
-}
-
 //RANDOMLY selects a variable out of the remaining unassigned ones.
 const std::pair<int, int> SudokuSolver_Basic::selectNextVariable() {
 	int select = rand() % (TOTAL_ENTRIES - assignedCount);
