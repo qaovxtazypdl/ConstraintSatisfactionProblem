@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <time.h>
 
 template<class VarIndex, class VarType>
 class ConstraintProblem {
@@ -10,8 +11,9 @@ public:
 	//main search algorithm
 	virtual bool backtrackingSearch() {
 		unsigned int startTime = (unsigned int)time(NULL);
-		backtrackingSearch_Recursive();
+		bool result = backtrackingSearch_Recursive();
 		elapsedTime = (unsigned int)time(NULL) - startTime;
+		return result;
 	};
 
 protected:
@@ -21,7 +23,7 @@ protected:
 
 		VarIndex idx = selectNextVariable();
 		std::vector<VarType> valueOrder = getValueOrder(idx);
-		for (std::vector<VarType>::const_iterator it = valueOrder.begin(); it != valueOrder.end(); ++it)
+		for (auto it = valueOrder.begin(); it != valueOrder.end(); ++it)
 		{
 			assignValue(idx, *it);
 			if (checkConstraints()) {
@@ -34,22 +36,6 @@ protected:
 		}
 		return false;
 	};
-
-	int nodesVisited;
-	unsigned int elapsedTime;
-
-	//constraint checking
-	virtual bool isAssignComplete() = 0;
-	virtual bool checkConstraints() = 0;
-
-	//selection of variable and value
-	virtual void assignValue(const VarIndex &selectedVar, const VarType &value) = 0;
-	virtual void removeAssign(const VarIndex &selectedVar) = 0;
-	virtual const VarIndex selectNextVariable() = 0;
-	virtual const std::vector<VarType> getValueOrder(const VarIndex &idx) = 0;
-
-	virtual Variable& getVariable(const VarIndex &idx) = 0;
-
 
 	class Variable {
 		VarType value;
@@ -77,5 +63,19 @@ protected:
 		}
 	};
 
+	int nodesVisited;
+	unsigned int elapsedTime;
+
+	//constraint checking
+	virtual bool isAssignComplete() = 0;
+	virtual bool checkConstraints() = 0;
+
+	//selection of variable and value
+	virtual void assignValue(const VarIndex &selectedVar, const VarType &value) = 0;
+	virtual void removeAssign(const VarIndex &selectedVar) = 0;
+	virtual const VarIndex selectNextVariable() = 0;
+	virtual const std::vector<VarType> getValueOrder(const VarIndex &idx) = 0;
+
+	virtual Variable& getVariable(const VarIndex &idx) = 0;
 };
 

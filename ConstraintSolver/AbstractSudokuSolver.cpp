@@ -12,6 +12,10 @@ AbstractSudokuSolver::AbstractSudokuSolver(const std::map<std::pair<int, int>, i
 			grid[i][j] = Variable();
 		}
 	}
+
+	for (auto it = initialState.begin(); it != initialState.end(); ++it) {
+		getVariable(it->first).assignValue(it->second);
+	}
 }
 
 AbstractSudokuSolver::~AbstractSudokuSolver() {
@@ -22,7 +26,7 @@ bool AbstractSudokuSolver::isAssignComplete() {
 }
 
 bool AbstractSudokuSolver::checkConstraints() {
-	return false;
+	return true;
 }
 
 std::ostream &operator<<(std::ostream &out, const AbstractSudokuSolver &puzzle) {
