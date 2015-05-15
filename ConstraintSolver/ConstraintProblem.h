@@ -4,8 +4,19 @@
 template<class VarIndex, class VarType>
 class ConstraintProblem {
 public:
+	ConstraintProblem() : nodesVisited(0), elapsedTime(0) {
+	}
+
 	//main search algorithm
 	virtual bool backtrackingSearch() {
+		unsigned int startTime = (unsigned int)time(NULL);
+		backtrackingSearch_Recursive();
+		elapsedTime = (unsigned int)time(NULL) - startTime;
+	};
+
+protected:
+	virtual bool backtrackingSearch_Recursive() {
+		nodesVisited++;
 		if (isAssignComplete()) return true;
 
 		VarIndex idx = selectNextVariable();
@@ -14,16 +25,32 @@ public:
 		{
 			assignValue(idx, *it);
 			if (checkConstraints()) {
-				if (backtrackingSearch()) return true;
-				removeAssign(idx);
-			} else {
+				if (backtrackingSearch_Recursive()) return true;
+				else removeAssign(idx);
+			}
+			else {
 				removeAssign(idx);
 			}
 		}
 		return false;
 	};
 
-protected:
+	int nodesVisited;
+	unsigned int elapsedTime;
+
+	//constraint checking
+	virtual bool isAssignComplete() = 0;
+	virtual bool checkConstraints() = 0;
+
+	//selection of variable and value
+	virtual void assignValue(const VarIndex &selectedVar, const VarType &value) = 0;
+	virtual void removeAssign(const VarIndex &selectedVar) = 0;
+	virtual const VarIndex selectNextVariable() = 0;
+	virtual const std::vector<VarType> getValueOrder(const VarIndex &idx) = 0;
+
+	virtual Variable& getVariable(const VarIndex &idx) = 0;
+
+
 	class Variable {
 		VarType value;
 		bool assigned;
@@ -44,18 +71,11 @@ protected:
 		bool isAssigned() {
 			return assigned;
 		}
+
+		VarType getValue() const {
+			return value;
+		}
 	};
 
-	//constraint checking
-	virtual bool isAssignComplete() = 0;
-	virtual bool checkConstraints() = 0;
-
-	//selection of variable and value
-	virtual void assignValue(const VarIndex &selectedVar, const VarType &value) = 0;
-	virtual void removeAssign(const VarIndex &selectedVar) = 0;
-	virtual const VarIndex selectNextVariable() = 0;
-	virtual const std::vector<VarType> getValueOrder(const VarIndex &idx) = 0;
-
-	virtual Variable& getVariable(const VarIndex &idx) = 0;
 };
 

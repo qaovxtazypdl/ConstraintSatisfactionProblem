@@ -1,10 +1,11 @@
 #include "SudokuSolver_Basic.h"
 #include <stdlib.h>
 #include <algorithm>
+#include <map>
 #include <random>
-#include <chrono>
+#include <time.h>
 
-SudokuSolver_Basic::SudokuSolver_Basic() : AbstractSudokuSolver() {
+SudokuSolver_Basic::SudokuSolver_Basic(const std::map<std::pair<int, int>, int> &initialState) : AbstractSudokuSolver(initialState) {
 }
 
 SudokuSolver_Basic::~SudokuSolver_Basic() {
@@ -49,6 +50,6 @@ const std::vector<int> SudokuSolver_Basic::getValueOrder(const std::pair<int, in
 		validValues.push_back(i);
 	}
 
-	shuffle(validValues.begin(), validValues.end(), std::default_random_engine(time(NULL)));
+	shuffle(validValues.begin(), validValues.end(), std::default_random_engine((unsigned int)time(NULL)));
 	return validValues;
 }

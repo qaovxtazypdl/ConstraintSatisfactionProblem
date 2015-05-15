@@ -6,7 +6,7 @@
 
 class SudokuSolver_Basic : virtual public AbstractSudokuSolver {
 public:
-	SudokuSolver_Basic();
+	SudokuSolver_Basic(const std::map<std::pair<int, int>, int> &initialState);
 	virtual ~SudokuSolver_Basic();
 protected:
 	//selection of variable and value
