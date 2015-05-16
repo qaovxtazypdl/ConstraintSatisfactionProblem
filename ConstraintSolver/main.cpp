@@ -3,7 +3,6 @@
 #include "AbstractSudokuSolver.h"
 #include "SudokuSolver_Basic.h"
 #include "SudokuSolver_ForwardChecking.h"
-#include <chrono>
 
 using namespace std;
 //stack instead of recomputing (FC)

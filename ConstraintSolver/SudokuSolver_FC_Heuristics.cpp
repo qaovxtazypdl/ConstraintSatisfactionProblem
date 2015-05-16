@@ -56,9 +56,16 @@ const std::vector<int> SudokuSolver_FC_Heuristics::getValueOrder(const std::pair
 		}
 	}
 
-	shuffle(validValues.begin(), validValues.end(), std::default_random_engine(std::chrono::system_clock::now().time_since_epoch().count()));
+	shuffle(validValues.begin(), validValues.end(), std::default_random_engine(getTimeInMicroseconds()));
 	return validValues;
 }
+
+
+
+
+
+
+
 
 bool SudokuSolver_FC_Heuristics::checkConstraints(const std::pair<int, int> &idx, const int &value) {
 	bool checkBase = AbstractSudokuSolver::checkConstraints(idx, value);
