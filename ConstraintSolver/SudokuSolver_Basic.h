@@ -1,7 +1,6 @@
 #pragma once
 #include "AbstractSudokuSolver.h"
 #include "ConstraintProblem.h"
-#include <vector>
 #include <utility>
 
 class SudokuSolver_Basic : virtual public AbstractSudokuSolver {

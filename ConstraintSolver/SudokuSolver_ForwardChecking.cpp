@@ -1,21 +1,20 @@
 #include "SudokuSolver_ForwardChecking.h"
 #include <stdlib.h>
 #include <algorithm>
-#include <iostream>
 #include <map>
 #include <random>
 
 SudokuSolver_ForwardChecking::SudokuSolver_ForwardChecking(const std::map<PairIndex, int> &initialState) : AbstractSudokuSolver() {
+	for (int i = 0; i < GRID_WIDTH; i++) {
+		for (int j = 0; j < GRID_HEIGHT; j++) {
+			legalValues[i][j] = MAX_BIT_MASK;
+		}
+	}
+
 	for (auto it = initialState.begin(); it != initialState.end(); ++it) {
 		if (it->second > 0 && it->second <= MAX_VAL)
 		{
 			assignValue(it->first, it->second);
-		}
-	}
-
-	for (int i = 0; i < GRID_WIDTH; i++) {
-		for (int j = 0; j < GRID_HEIGHT; j++) {
-			legalValues[i][j] = MAX_BIT_MASK;
 		}
 	}
 }

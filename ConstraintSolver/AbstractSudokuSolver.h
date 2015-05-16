@@ -1,6 +1,5 @@
 #pragma once
 #include "ConstraintProblem.h"
-#include <vector>
 #include <utility>
 #include <array>
 #include <map>

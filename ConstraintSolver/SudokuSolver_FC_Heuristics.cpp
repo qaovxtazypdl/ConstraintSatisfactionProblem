@@ -1,22 +1,21 @@
 #include "SudokuSolver_FC_Heuristics.h"
 #include <stdlib.h>
 #include <algorithm>
-#include <iostream>
 #include <map>
 #include <random>
 #include <list>
 
 SudokuSolver_FC_Heuristics::SudokuSolver_FC_Heuristics(const std::map<PairIndex, int> &initialState) : AbstractSudokuSolver() {
+	for (int i = 0; i < GRID_WIDTH; i++) {
+		for (int j = 0; j < GRID_HEIGHT; j++) {
+			legalValues[i][j] = MAX_BIT_MASK;
+		}
+	}
+
 	for (auto it = initialState.begin(); it != initialState.end(); ++it) {
 		if (it->second > 0 && it->second <= MAX_VAL)
 		{
 			assignValue(it->first, it->second);
-		}
-	}
-
-	for (int i = 0; i < GRID_WIDTH; i++) {
-		for (int j = 0; j < GRID_HEIGHT; j++) {
-			legalValues[i][j] = MAX_BIT_MASK;
 		}
 	}
 }

@@ -1,7 +1,4 @@
 #include "AbstractSudokuSolver.h"
-#include <stdlib.h>
-#include <time.h>
-#include <iostream>
 
 AbstractSudokuSolver::AbstractSudokuSolver() : ConstraintProblem(), assignedCount(0) {
 	for (int i = 0; i < GRID_WIDTH; i++) {
