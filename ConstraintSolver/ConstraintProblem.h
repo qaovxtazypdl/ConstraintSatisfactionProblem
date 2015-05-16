@@ -68,7 +68,7 @@ protected:
 		}
 	};
 
-	int nodesVisited;
+	unsigned long nodesVisited;
 	unsigned long elapsedTime;
 
 	//constraint checking
