@@ -55,8 +55,8 @@ protected:
 		}
 
 		void removeAssign() {
-			assigned = false;
 			value = VarType();
+			assigned = false;
 		}
 
 		bool isAssigned() {
