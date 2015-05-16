@@ -82,11 +82,11 @@ bool AbstractSudokuSolver::checkConstraints(const std::pair<int, int> &idx, cons
 std::ostream &operator<<(std::ostream &out, const AbstractSudokuSolver &puzzle) {
 	for (int i = 0; i < AbstractSudokuSolver::GRID_WIDTH; i++) {
 		for (int j = 0; j < AbstractSudokuSolver::GRID_HEIGHT; j++) {
-			std::cout << puzzle.grid[i][j].getValue() << " ";
+			out << puzzle.grid[i][j].getValue() << " ";
 		}
-		std::cout << std::endl;
+		out << std::endl;
 	}
 
-	std::cout << (puzzle.isSolved ? "Solved. " : "No Solution. ") << "Visited " << puzzle.nodesVisited << " nodes in " << puzzle.elapsedTime << " microseconds.";
+	out << (puzzle.isSolved ? "Solved. " : "No Solution. ") << "Visited " << puzzle.nodesVisited << " nodes in " << puzzle.elapsedTime << " microseconds.";
 	return out;
 }
