@@ -5,11 +5,14 @@
 #include <map>
 #include <random>
 
-SudokuSolver_ForwardChecking::SudokuSolver_ForwardChecking(const std::map<std::pair<int, int>, int> &initialState) : AbstractSudokuSolver(initialState) {
+SudokuSolver_ForwardChecking::SudokuSolver_ForwardChecking(const std::map<std::pair<int, int>, int> &initialState) : AbstractSudokuSolver() {
+	for (auto it = initialState.begin(); it != initialState.end(); ++it) {
+		assignValue(it->first, it->second);
+	}
+
 	for (int i = 0; i < GRID_WIDTH; i++) {
 		for (int j = 0; j < GRID_HEIGHT; j++) {
 			for (int k = 0; k < MAX_VAL; k++) {
-				//bit mask from 1-9
 				legalValues[i][j] = MAX_BIT_MASK;
 			}
 		}
@@ -51,7 +54,6 @@ const std::vector<int> SudokuSolver_ForwardChecking::getValueOrder(const std::pa
 	}
 
 	shuffle(validValues.begin(), validValues.end(), std::default_random_engine(std::chrono::system_clock::now().time_since_epoch().count()));
-
 	return validValues;
 }
 
@@ -94,3 +96,4 @@ void SudokuSolver_ForwardChecking::removeAssign(const std::pair<int, int> &idx) 
 		legalValues[it->first][it->second] = ~mask & MAX_BIT_MASK;
 	}
 }
+

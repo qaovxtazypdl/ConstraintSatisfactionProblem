@@ -7,7 +7,7 @@
 
 class AbstractSudokuSolver : virtual public ConstraintProblem<std::pair<int, int>, int> {
 public:
-	AbstractSudokuSolver(const std::map<std::pair<int, int>, int> &initialState);
+	AbstractSudokuSolver();
 	virtual ~AbstractSudokuSolver();
 	friend std::ostream &operator<<(std::ostream &out, const AbstractSudokuSolver &puzzle);
 
@@ -26,9 +26,15 @@ protected:
 	virtual bool isAssignComplete();
 	virtual bool checkConstraints(const std::pair<int, int> &idx, const int &value);
 
-	virtual void assignValue(const std::pair<int, int> &idx, const int &value);
-	virtual void removeAssign(const std::pair<int, int> &idx);
+	virtual void assignValue(const std::pair<int, int> &idx, const int &value) = 0;
+	virtual void removeAssign(const std::pair<int, int> &idx) = 0;
+	virtual const std::pair<int, int> selectNextVariable() = 0;
+	virtual const std::vector<int> getValueOrder(const std::pair<int, int> &idx) = 0;
 
-	std::vector<std::pair<int, int>> getNeighbours(const std::pair<int, int> &idx);
+	//utility
 	int getNeighbourMask(const std::pair<int, int> &idx);
+
+private:
+	//helper
+	const std::vector<std::pair<int, int>> getNeighbours(const std::pair<int, int> &idx);
 };

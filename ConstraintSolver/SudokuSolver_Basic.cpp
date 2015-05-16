@@ -5,7 +5,10 @@
 #include <map>
 #include <random>
 
-SudokuSolver_Basic::SudokuSolver_Basic(const std::map<std::pair<int, int>, int> &initialState) : AbstractSudokuSolver(initialState) {
+SudokuSolver_Basic::SudokuSolver_Basic(const std::map<std::pair<int, int>, int> &initialState) : AbstractSudokuSolver() {
+	for (auto it = initialState.begin(); it != initialState.end(); ++it) {
+		assignValue(it->first, it->second);
+	}
 }
 
 SudokuSolver_Basic::~SudokuSolver_Basic() {
@@ -43,4 +46,17 @@ const std::vector<int> SudokuSolver_Basic::getValueOrder(const std::pair<int, in
 	shuffle(validValues.begin(), validValues.end(), std::default_random_engine(std::chrono::system_clock::now().time_since_epoch().count()));
 
 	return validValues;
+}
+
+//selection of variable and value
+void SudokuSolver_Basic::assignValue(const std::pair<int, int> &idx, const int &value) {
+	if (value > 0 && value <= MAX_VAL) {
+		grid[idx.first][idx.second].assignValue(value);
+		assignedCount++;
+	}
+}
+
+void SudokuSolver_Basic::removeAssign(const std::pair<int, int> &idx) {
+	grid[idx.first][idx.second].removeAssign();
+	assignedCount--;
 }
