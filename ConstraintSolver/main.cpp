@@ -32,18 +32,9 @@ int main() {
 	evil   = { 1, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 8, 1, 0, 2, 0, 6, 3, 0, 5, 0, 0, 0, 0, 0, 7, 0, 3, 9, 0, 0, 0, 0, 0, 0, 5, 8, 0, 4, 6, 0, 0, 0, 0, 0, 0, 2, 5, 0, 4, 0, 0, 0, 0, 0, 1, 0, 8, 7, 0, 2, 0, 8, 9, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 6 };
 
 	initialState = list2map(evil);
-	/*
-	SudokuSolver_Basic solver(initialState);
-	solver.backtrackingSearch();
-	cout << solver << endl;*/
 
-	/*
-	SudokuSolver_ForwardChecking solverFC(initialState);
-	solverFC.backtrackingSearch();
-	cout << solverFC << endl;*/
-
-	ConstraintProblem<PairIndex, int> *solverFCH = new SudokuSolver_FC_Heuristics(initialState);
-	solverFCH->backtrackingSearch();
-	solverFCH->printResult();
-	delete solverFCH;
+	ConstraintProblem<PairIndex, int> *solver = new SudokuSolver_ForwardChecking(initialState);
+	solver->backtrackingSearch();
+	solver->printResult();
+	delete solver;
 }

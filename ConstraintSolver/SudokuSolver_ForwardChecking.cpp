@@ -15,9 +15,7 @@ SudokuSolver_ForwardChecking::SudokuSolver_ForwardChecking(const std::map<PairIn
 
 	for (int i = 0; i < GRID_WIDTH; i++) {
 		for (int j = 0; j < GRID_HEIGHT; j++) {
-			for (int k = 0; k < MAX_VAL; k++) {
-				legalValues[i][j] = MAX_BIT_MASK;
-			}
+			legalValues[i][j] = MAX_BIT_MASK;
 		}
 	}
 }
@@ -71,6 +69,7 @@ bool SudokuSolver_ForwardChecking::checkConstraints(const PairIndex &idx, const 
 			return false;
 		}
 	}
+
 	return true;
 }
 
