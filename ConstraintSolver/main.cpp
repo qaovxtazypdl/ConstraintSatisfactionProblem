@@ -24,8 +24,6 @@ map<pair<int, int>, int> list2map(vector<int> v) {
 int main() {
 	map<pair<int, int>, int> initialState;
 
-
-
 	vector<int> easy, medium, hard, evil;
 	easy   = { 3, 0, 9, 0, 0, 0, 0, 4, 2, 0, 1, 8, 9, 4, 3, 6, 0, 0, 0, 0, 0, 0, 0, 0, 8, 9, 0, 0, 0, 3, 0, 9, 0, 0, 6, 0, 4, 2, 7, 0, 0, 0, 5, 8, 9, 0, 6, 0, 0, 8, 0, 2, 0, 0, 0, 7, 2, 0, 0, 0, 0, 0, 0, 0, 0, 4, 5, 7, 6, 3, 2, 0, 6, 3, 0, 0, 0, 0, 7, 0, 4 };
 	medium = { 0, 0, 0, 1, 2, 0, 0, 3, 0, 0, 0, 3, 0, 8, 0, 0, 1, 6, 4, 0, 0, 5, 3, 0, 0, 9, 0, 0, 1, 0, 8, 0, 0, 5, 2, 0, 0, 4, 0, 0, 0, 0, 0, 6, 0, 0, 6, 8, 0, 0, 2, 0, 7, 0, 0, 8, 0, 0, 9, 3, 0, 0, 2, 6, 9, 0, 0, 5, 0, 3, 0, 0, 0, 3, 0, 0, 4, 8, 0, 0, 0 };
@@ -36,7 +34,6 @@ int main() {
 
 	SudokuSolver_Basic solver(initialState);
 
-	bool success = solver.backtrackingSearch();
+	solver.backtrackingSearch();
 	cout << solver << endl;
-	cout << success << endl;
 }

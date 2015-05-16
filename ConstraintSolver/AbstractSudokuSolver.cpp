@@ -73,6 +73,7 @@ std::ostream &operator<<(std::ostream &out, const AbstractSudokuSolver &puzzle) 
 		}
 		std::cout << std::endl;
 	}
-	std::cout << "The backtracking algorithm visited " << puzzle.nodesVisited << " nodes in " << puzzle.elapsedTime << "ns.";
+
+	std::cout << (puzzle.isSolved ? "Solved. " : "No Solution. ") << "Visited " << puzzle.nodesVisited << " nodes in " << puzzle.elapsedTime << " microseconds.";
 	return out;
 }

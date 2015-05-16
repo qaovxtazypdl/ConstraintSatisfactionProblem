@@ -7,15 +7,16 @@
 template<class VarIndex, class VarType>
 class ConstraintProblem {
 public:
-	ConstraintProblem() : nodesVisited(0), elapsedTime(0) {
-		srand(std::chrono::system_clock::now().time_since_epoch().count());
+	ConstraintProblem() : nodesVisited(0), elapsedTime(0), isSolved(false) {
+		srand((unsigned int)std::chrono::system_clock::now().time_since_epoch().count());
 	}
 
 	//main search algorithm
 	virtual bool backtrackingSearch() {
-		auto startTime = std::chrono::system_clock::now().time_since_epoch().count();
+		auto startTime = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 		bool result = backtrackingSearch_Recursive();
-		elapsedTime = std::chrono::system_clock::now().time_since_epoch().count() - startTime;
+		elapsedTime = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count() - startTime;
+		isSolved = result;
 		return result;
 	};
 
@@ -70,6 +71,7 @@ protected:
 
 	unsigned long nodesVisited;
 	unsigned long elapsedTime;
+	bool isSolved;
 
 	//constraint checking
 	virtual bool isAssignComplete() = 0;
