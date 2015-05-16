@@ -29,13 +29,10 @@ protected:
 		std::vector<VarType> valueOrder = getValueOrder(idx);
 		for (auto it = valueOrder.begin(); it != valueOrder.end(); ++it)
 		{
-			assignValue(idx, *it);
-			if (checkConstraints()) {
+			if (checkConstraints(idx, *it)) {
+				assignValue(idx, *it);
 				if (backtrackingSearch_Recursive()) return true;
 				else removeAssign(idx);
-			}
-			else {
-				removeAssign(idx);
 			}
 		}
 		return false;
@@ -75,7 +72,7 @@ protected:
 
 	//constraint checking
 	virtual bool isAssignComplete() = 0;
-	virtual bool checkConstraints() = 0;
+	virtual bool checkConstraints(const VarIndex &selectedVar, const VarType &value) = 0;
 
 	//selection of variable and value
 	virtual void assignValue(const VarIndex &selectedVar, const VarType &value) = 0;

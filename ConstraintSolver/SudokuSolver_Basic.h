@@ -9,7 +9,6 @@ public:
 	SudokuSolver_Basic(const std::map<std::pair<int, int>, int> &initialState);
 	virtual ~SudokuSolver_Basic();
 protected:
-	//selection of variable and value
 	virtual const std::pair<int, int> selectNextVariable();
 	virtual const std::vector<int> getValueOrder(const std::pair<int, int> &idx);
 };

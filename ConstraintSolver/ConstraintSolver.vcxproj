@@ -69,11 +69,13 @@
     <ClInclude Include="AbstractSudokuSolver.h" />
     <ClInclude Include="ConstraintProblem.h" />
     <ClInclude Include="SudokuSolver_Basic.h" />
+    <ClInclude Include="SudokuSolver_ForwardChecking.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AbstractSudokuSolver.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SudokuSolver_Basic.cpp" />
+    <ClCompile Include="SudokuSolver_ForwardChecking.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
