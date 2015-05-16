@@ -6,11 +6,11 @@
 
 class SudokuSolver_Basic : virtual public AbstractSudokuSolver {
 public:
-	SudokuSolver_Basic(const std::map<std::pair<int, int>, int> &initialState);
+	SudokuSolver_Basic(const std::map<PairIndex, int> &initialState);
 	virtual ~SudokuSolver_Basic();
 protected:
-	virtual const std::pair<int, int> selectNextVariable();
-	virtual const std::vector<int> getValueOrder(const std::pair<int, int> &idx);
-	virtual void assignValue(const std::pair<int, int> &idx, const int &value);
-	virtual void removeAssign(const std::pair<int, int> &idx);
+	virtual const PairIndex selectNextVariable();
+	virtual const std::vector<int> getValueOrder(const PairIndex &idx);
+	virtual void assignValue(const PairIndex &idx, const int &value);
+	virtual void removeAssign(const PairIndex &idx);
 };

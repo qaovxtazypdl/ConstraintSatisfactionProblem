@@ -4,11 +4,17 @@
 #include <utility>
 #include <array>
 #include <map>
+#include <iostream>
 
-class AbstractSudokuSolver : virtual public ConstraintProblem<std::pair<int, int>, int> {
+typedef std::pair<int, int> PairIndex;
+
+class AbstractSudokuSolver : virtual public ConstraintProblem<PairIndex, int> {
 public:
 	AbstractSudokuSolver();
 	virtual ~AbstractSudokuSolver();
+	virtual void printResult() {
+		std::cout << *this << std::endl;
+	}
 	friend std::ostream &operator<<(std::ostream &out, const AbstractSudokuSolver &puzzle);
 
 protected:
@@ -18,23 +24,23 @@ protected:
 	static const int TOTAL_ENTRIES = 81;
 
 	std::array<std::array<Variable, GRID_HEIGHT>, GRID_WIDTH> grid;
-	std::array<std::array<std::vector<std::pair<int, int>>, GRID_HEIGHT>, GRID_WIDTH> neighbours;
+	std::array<std::array<std::vector<PairIndex>, GRID_HEIGHT>, GRID_WIDTH> neighbours;
 	
 	int assignedCount;
 
 	//pure virtuals / expect to be overwritten
-	virtual bool checkConstraints(const std::pair<int, int> &idx, const int &value);
-	virtual void assignValue(const std::pair<int, int> &idx, const int &value) = 0;
-	virtual void removeAssign(const std::pair<int, int> &idx) = 0;
-	virtual const std::pair<int, int> selectNextVariable() = 0;
-	virtual const std::vector<int> getValueOrder(const std::pair<int, int> &idx) = 0;
+	virtual bool checkConstraints(const PairIndex &idx, const int &value);
+	virtual void assignValue(const PairIndex &idx, const int &value) = 0;
+	virtual void removeAssign(const PairIndex &idx) = 0;
+	virtual const PairIndex selectNextVariable() = 0;
+	virtual const std::vector<int> getValueOrder(const PairIndex &idx) = 0;
 
 	//utility / expect not to be overwritten
 	virtual bool isAssignComplete();
-	int getNeighbourMask(const std::pair<int, int> &idx);
+	int getNeighbourMask(const PairIndex &idx);
 	int numberOfSetBits(int i);
 
 private:
 	//helper
-	const std::vector<std::pair<int, int>> getNeighbours(const std::pair<int, int> &idx);
+	const std::vector<PairIndex> getNeighbours(const PairIndex &idx);
 };

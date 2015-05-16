@@ -6,7 +6,7 @@
 #include <random>
 #include <list>
 
-SudokuSolver_FC_Heuristics::SudokuSolver_FC_Heuristics(const std::map<std::pair<int, int>, int> &initialState) : AbstractSudokuSolver() {
+SudokuSolver_FC_Heuristics::SudokuSolver_FC_Heuristics(const std::map<PairIndex, int> &initialState) : AbstractSudokuSolver() {
 	for (auto it = initialState.begin(); it != initialState.end(); ++it) {
 		if (it->second > 0 && it->second <= MAX_VAL)
 		{
@@ -27,13 +27,13 @@ SudokuSolver_FC_Heuristics::~SudokuSolver_FC_Heuristics() {
 }
 
 //RANDOMLY selects a variable out of the remaining unassigned ones.
-const std::pair<int, int> SudokuSolver_FC_Heuristics::selectNextVariable() {
+const PairIndex SudokuSolver_FC_Heuristics::selectNextVariable() {
 	//H: most constrained variable heuristic
 	int fewestLegals = INT_MAX;
-	std::vector<std::pair<int, int>> mostConstrained;
+	std::vector<PairIndex> mostConstrained;
 	for (int i = 0; i < GRID_WIDTH; i++) {
 		for (int j = 0; j < GRID_HEIGHT; j++) {
-			std::pair<int, int> curIdx = std::pair<int, int>(i, j);
+			PairIndex curIdx = PairIndex(i, j);
 			if (!grid[curIdx.first][curIdx.second].isAssigned()) {
 				int legals = numberOfSetBits(legalValues[curIdx.first][curIdx.second]);
 				if (legals == fewestLegals) {
@@ -48,11 +48,11 @@ const std::pair<int, int> SudokuSolver_FC_Heuristics::selectNextVariable() {
 	}
 	if (mostConstrained.size() == 1) return mostConstrained[0];
 	//something has gone horribly wrong.
-	else if (mostConstrained.size() == 0) return std::pair<int, int>(-1, -1);
+	else if (mostConstrained.size() == 0) return PairIndex(-1, -1);
 
 	//H: most constraining variable heuristic to break ties.
 	int mostConstraints = INT_MIN;
-	std::vector<std::pair<int, int>> mostConstraining;
+	std::vector<PairIndex> mostConstraining;
 	for (auto it = mostConstrained.begin(); it != mostConstrained.end(); ++it) {
 		int numConstraints = neighbours[it->first][it->second].size();
 		if (numConstraints == mostConstraints) {
@@ -65,14 +65,14 @@ const std::pair<int, int> SudokuSolver_FC_Heuristics::selectNextVariable() {
 	}
 
 	//something has gone horribly wrong.
-	if (mostConstraining.size() == 0) return std::pair<int, int>(-1, -1);
+	if (mostConstraining.size() == 0) return PairIndex(-1, -1);
 	else {
 		//return an index at random.
 		return mostConstraining[rand() % mostConstraining.size()];
 	}
 }
 
-const std::vector<int> SudokuSolver_FC_Heuristics::getValueOrder(const std::pair<int, int> &idx) {
+const std::vector<int> SudokuSolver_FC_Heuristics::getValueOrder(const PairIndex &idx) {
 	std::vector<int> validValues;
 	for (int i = 1; i <= MAX_VAL; i++) {
 		if (legalValues[idx.first][idx.second] & (0x1 << (i - 1))) {
@@ -84,7 +84,7 @@ const std::vector<int> SudokuSolver_FC_Heuristics::getValueOrder(const std::pair
 
 	//H: least constraining value heuristic
 	int seen = 0;
-	std::list<std::pair<int, int>> minPriorityList;
+	std::list<PairIndex> minPriorityList;
 	for (auto validValueIt = validValues.begin(); validValueIt != validValues.end(); ++validValueIt) {
 		seen++;
 		int i = *validValueIt;
@@ -105,7 +105,7 @@ const std::vector<int> SudokuSolver_FC_Heuristics::getValueOrder(const std::pair
 		for (; listIt != minPriorityList.end(); ++listIt) {
 			if (listIt->first > priority) break;
 		}
-		minPriorityList.insert(listIt, std::pair<int, int>(priority, i));
+		minPriorityList.insert(listIt, PairIndex(priority, i));
 	}
 
 	std::vector<int> returnOrder;
@@ -115,7 +115,7 @@ const std::vector<int> SudokuSolver_FC_Heuristics::getValueOrder(const std::pair
 	return returnOrder;
 }
 
-bool SudokuSolver_FC_Heuristics::checkConstraints(const std::pair<int, int> &idx, const int &value) {
+bool SudokuSolver_FC_Heuristics::checkConstraints(const PairIndex &idx, const int &value) {
 	bool checkBase = AbstractSudokuSolver::checkConstraints(idx, value);
 	if (checkBase == false) return false;
 
@@ -130,7 +130,7 @@ bool SudokuSolver_FC_Heuristics::checkConstraints(const std::pair<int, int> &idx
 }
 
 //selection of variable and value
-void SudokuSolver_FC_Heuristics::assignValue(const std::pair<int, int> &idx, const int &value) {
+void SudokuSolver_FC_Heuristics::assignValue(const PairIndex &idx, const int &value) {
 	grid[idx.first][idx.second].assignValue(value);
 	assignedCount++;
 
@@ -141,14 +141,14 @@ void SudokuSolver_FC_Heuristics::assignValue(const std::pair<int, int> &idx, con
 	}
 }
 
-void SudokuSolver_FC_Heuristics::removeAssign(const std::pair<int, int> &idx) {
+void SudokuSolver_FC_Heuristics::removeAssign(const PairIndex &idx) {
 	grid[idx.first][idx.second].removeAssign();
 	assignedCount--;
 
 	auto neighboring = neighbours[idx.first][idx.second];
 	for (auto it = neighboring.begin(); it != neighboring.end(); ++it) {
-		int mask = getNeighbourMask(*it);
-		legalValues[it->first][it->second] = ~mask & MAX_BIT_MASK;
+		int neighbourMask = getNeighbourMask(*it);
+		legalValues[it->first][it->second] = ~neighbourMask & MAX_BIT_MASK;
 	}
 }
 

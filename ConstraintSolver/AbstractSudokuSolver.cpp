@@ -6,7 +6,7 @@
 AbstractSudokuSolver::AbstractSudokuSolver() : ConstraintProblem(), assignedCount(0) {
 	for (int i = 0; i < GRID_WIDTH; i++) {
 		for (int j = 0; j < GRID_HEIGHT; j++) {
-			neighbours[i][j] = getNeighbours(std::pair<int, int>(i, j));
+			neighbours[i][j] = getNeighbours(PairIndex(i, j));
 		}
 	}
 }
@@ -14,19 +14,19 @@ AbstractSudokuSolver::AbstractSudokuSolver() : ConstraintProblem(), assignedCoun
 AbstractSudokuSolver::~AbstractSudokuSolver() {
 }
 
-const std::vector<std::pair<int, int>> AbstractSudokuSolver::getNeighbours(const std::pair<int, int> &idx) {
-	std::vector<std::pair<int, int>> neighbours;
+const std::vector<PairIndex> AbstractSudokuSolver::getNeighbours(const PairIndex &idx) {
+	std::vector<PairIndex> neighbours;
 
 	for (int j = 0; j < GRID_HEIGHT; j++) {
 		if (idx.second != j) {
-			neighbours.push_back(std::pair<int, int>(idx.first, j));
+			neighbours.push_back(PairIndex(idx.first, j));
 		}
 	}
 
 	//get rid of values in the verticals
 	for (int i = 0; i < GRID_WIDTH; i++) {
 		if (idx.first != i) {
-			neighbours.push_back(std::pair<int, int>(i, idx.second));
+			neighbours.push_back(PairIndex(i, idx.second));
 		}
 	}
 
@@ -35,7 +35,7 @@ const std::vector<std::pair<int, int>> AbstractSudokuSolver::getNeighbours(const
 	for (int i = 0; i < SQUARE_SIZE; i++) {
 		for (int j = 0; j < SQUARE_SIZE; j++) {
 			if (outeri + i != idx.first && outerj + j != idx.second)
-				neighbours.push_back(std::pair<int, int>(outeri + i, outerj + j));
+				neighbours.push_back(PairIndex(outeri + i, outerj + j));
 		}
 	}
 	return neighbours;
@@ -45,7 +45,7 @@ bool AbstractSudokuSolver::isAssignComplete() {
 	return assignedCount == TOTAL_ENTRIES;
 }
 
-int AbstractSudokuSolver::getNeighbourMask(const std::pair<int, int> &idx) {
+int AbstractSudokuSolver::getNeighbourMask(const PairIndex &idx) {
 	int returnMask = 0;
 	auto neighboring = neighbours[idx.first][idx.second];
 	for (auto it = neighboring.begin(); it != neighboring.end(); ++it) {
@@ -57,7 +57,7 @@ int AbstractSudokuSolver::getNeighbourMask(const std::pair<int, int> &idx) {
 	return returnMask;
 }
 
-bool AbstractSudokuSolver::checkConstraints(const std::pair<int, int> &idx, const int &value) {
+bool AbstractSudokuSolver::checkConstraints(const PairIndex &idx, const int &value) {
 	if (!(value > 0 && value <= MAX_VAL)) return false;
 	int mask = 0x1 << (value - 1);
 	return (getNeighbourMask(idx) & mask) == 0;

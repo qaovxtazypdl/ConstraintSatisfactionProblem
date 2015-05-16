@@ -1,7 +1,6 @@
 #pragma once
 #include <vector>
 #include <time.h>
-#include <iostream>
 #include <chrono>
 
 template<class VarIndex, class VarType>
@@ -9,6 +8,9 @@ class ConstraintProblem {
 public:
 	ConstraintProblem() : nodesVisited(0), elapsedTime(0), isSolved(false) {
 		srand(getTimeInMicroseconds());
+	}
+
+	virtual ~ConstraintProblem() {
 	}
 
 	//main search algorithm
@@ -19,6 +21,8 @@ public:
 		isSolved = result;
 		return result;
 	};
+
+	virtual void printResult() = 0;
 
 protected:
 	virtual bool backtrackingSearch_Recursive() {
