@@ -58,6 +58,7 @@ int AbstractSudokuSolver::getNeighbourMask(const std::pair<int, int> &idx) {
 }
 
 bool AbstractSudokuSolver::checkConstraints(const std::pair<int, int> &idx, const int &value) {
+	if (!(value > 0 && value <= MAX_VAL)) return false;
 	int mask = 0x1 << (value - 1);
 	return (getNeighbourMask(idx) & mask) == 0;
 }

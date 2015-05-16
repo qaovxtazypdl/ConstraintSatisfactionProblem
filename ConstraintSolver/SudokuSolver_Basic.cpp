@@ -7,7 +7,10 @@
 
 SudokuSolver_Basic::SudokuSolver_Basic(const std::map<std::pair<int, int>, int> &initialState) : AbstractSudokuSolver() {
 	for (auto it = initialState.begin(); it != initialState.end(); ++it) {
-		assignValue(it->first, it->second);
+		if (it->second > 0 && it->second <= MAX_VAL)
+		{
+			assignValue(it->first, it->second);
+		}
 	}
 }
 
@@ -50,10 +53,8 @@ const std::vector<int> SudokuSolver_Basic::getValueOrder(const std::pair<int, in
 
 //selection of variable and value
 void SudokuSolver_Basic::assignValue(const std::pair<int, int> &idx, const int &value) {
-	if (value > 0 && value <= MAX_VAL) {
-		grid[idx.first][idx.second].assignValue(value);
-		assignedCount++;
-	}
+	grid[idx.first][idx.second].assignValue(value);
+	assignedCount++;
 }
 
 void SudokuSolver_Basic::removeAssign(const std::pair<int, int> &idx) {

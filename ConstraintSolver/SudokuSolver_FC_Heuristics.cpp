@@ -7,7 +7,10 @@
 
 SudokuSolver_FC_Heuristics::SudokuSolver_FC_Heuristics(const std::map<std::pair<int, int>, int> &initialState) : AbstractSudokuSolver() {
 	for (auto it = initialState.begin(); it != initialState.end(); ++it) {
-		assignValue(it->first, it->second);
+		if (it->second > 0 && it->second <= MAX_VAL)
+		{
+			assignValue(it->first, it->second);
+		}
 	}
 
 	for (int i = 0; i < GRID_WIDTH; i++) {
@@ -73,16 +76,13 @@ bool SudokuSolver_FC_Heuristics::checkConstraints(const std::pair<int, int> &idx
 
 //selection of variable and value
 void SudokuSolver_FC_Heuristics::assignValue(const std::pair<int, int> &idx, const int &value) {
-	if (value > 0 && value <= MAX_VAL) {
-		grid[idx.first][idx.second].assignValue(value);
-		assignedCount++;
+	grid[idx.first][idx.second].assignValue(value);
+	assignedCount++;
 
-		int mask = 0x1 << (value - 1);
-		auto neighboring = neighbours[idx.first][idx.second];
-		for (auto it = neighboring.begin(); it != neighboring.end(); ++it) {
-			legalValues[it->first][it->second] &= ~mask;
-		}
-
+	int mask = 0x1 << (value - 1);
+	auto neighboring = neighbours[idx.first][idx.second];
+	for (auto it = neighboring.begin(); it != neighboring.end(); ++it) {
+		legalValues[it->first][it->second] &= ~mask;
 	}
 }
 
