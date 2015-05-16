@@ -4,15 +4,8 @@
 #include <iostream>
 
 AbstractSudokuSolver::AbstractSudokuSolver(const std::map<std::pair<int, int>, int> &initialState) : ConstraintProblem(), assignedCount(0) {
-	//init grid
-	for (int i = 0; i < GRID_WIDTH; i++) {
-		for (int j = 0; j < GRID_HEIGHT; j++) {
-			grid[i][j] = Variable();
-		}
-	}
-
 	for (auto it = initialState.begin(); it != initialState.end(); ++it) {
-		grid[it->first.first][it->first.second].assignValue(it->second);
+		assignValue(it->first, it->second);
 	}
 }
 
@@ -23,6 +16,19 @@ bool AbstractSudokuSolver::isAssignComplete() {
 	return assignedCount == TOTAL_ENTRIES;
 }
 
+//selection of variable and value
+void AbstractSudokuSolver::assignValue(const std::pair<int, int> &idx, const int &value) {
+	if (value > 0 && value <= MAX_VAL) {
+		grid[idx.first][idx.second].assignValue(value);
+		assignedCount++;
+	}
+}
+
+void AbstractSudokuSolver::removeAssign(const std::pair<int, int> &idx) {
+	grid[idx.first][idx.second].removeAssign();
+	assignedCount--;
+}
+
 bool AbstractSudokuSolver::checkConstraints() {
 	//check rows
 	for (int i = 0; i < GRID_WIDTH; i++) {
@@ -30,7 +36,7 @@ bool AbstractSudokuSolver::checkConstraints() {
 		for (int j = 0; j < GRID_HEIGHT; j++) {
 			int mask = 0x1 << (grid[i][j].getValue() - 1);
 			if (grid[i][j].isAssigned() && (unique9 & mask)) return false;
-			else unique9 |= mask;
+			else if (grid[i][j].isAssigned()) unique9 |= mask;
 		}
 	}
 	
@@ -40,7 +46,7 @@ bool AbstractSudokuSolver::checkConstraints() {
 		for (int i = 0; i < GRID_WIDTH; i++) {
 			int mask = 0x1 << (grid[i][j].getValue() - 1);
 			if (grid[i][j].isAssigned() && (unique9 & mask)) return false;
-			else unique9 |= mask;
+			else if (grid[i][j].isAssigned()) unique9 |= mask;
 		}
 	}
 
@@ -52,7 +58,7 @@ bool AbstractSudokuSolver::checkConstraints() {
 				for (int j = 0; j < SQUARE_SIZE; j++) {
 					int mask = 0x1 << (grid[outeri + i][outerj + j].getValue() - 1);
 					if (grid[outeri + i][outerj + j].isAssigned() && (unique9 & mask)) return false;
-					else unique9 |= mask;
+					else if (grid[outeri + i][outerj + j].isAssigned()) unique9 |= mask;
 				}
 			}
 		}

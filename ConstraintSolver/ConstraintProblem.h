@@ -46,6 +46,7 @@ protected:
 
 	public:
 		Variable() : assigned(false) {
+			value = VarType();
 		}
 
 		void assignValue(const VarType &val) {
@@ -55,6 +56,7 @@ protected:
 
 		void removeAssign() {
 			assigned = false;
+			value = VarType();
 		}
 
 		bool isAssigned() {

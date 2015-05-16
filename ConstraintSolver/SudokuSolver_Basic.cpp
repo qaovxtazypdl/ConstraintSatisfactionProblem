@@ -11,17 +11,6 @@ SudokuSolver_Basic::SudokuSolver_Basic(const std::map<std::pair<int, int>, int> 
 SudokuSolver_Basic::~SudokuSolver_Basic() {
 }
 
-//selection of variable and value
-void SudokuSolver_Basic::assignValue(const std::pair<int, int> &idx, const int &value) {
-	grid[idx.first][idx.second].assignValue(value);
-	assignedCount++;
-}
-
-void SudokuSolver_Basic::removeAssign(const std::pair<int, int> &idx) {
-	grid[idx.first][idx.second].removeAssign();
-	assignedCount--;
-}
-
 //RANDOMLY selects a variable out of the remaining unassigned ones.
 const std::pair<int, int> SudokuSolver_Basic::selectNextVariable() {
 	int select = rand() % (TOTAL_ENTRIES - assignedCount);
@@ -31,10 +20,11 @@ const std::pair<int, int> SudokuSolver_Basic::selectNextVariable() {
 		for (int j = 0; j < GRID_HEIGHT; j++) {
 			std::pair<int, int> curIdx = std::pair<int, int>(i, j);
 			if (!grid[curIdx.first][curIdx.second].isAssigned()) {
-				if (curCount++ == select)
+				if (curCount == select)
 				{
 					return curIdx;
 				}
+				curCount++;
 			}
 		}
 	}

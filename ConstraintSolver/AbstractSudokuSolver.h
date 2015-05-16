@@ -23,4 +23,7 @@ protected:
 	//constraint checking
 	virtual bool isAssignComplete();
 	virtual bool checkConstraints();
+
+	virtual void assignValue(const std::pair<int, int> &idx, const int &value);
+	virtual void removeAssign(const std::pair<int, int> &idx);
 };
