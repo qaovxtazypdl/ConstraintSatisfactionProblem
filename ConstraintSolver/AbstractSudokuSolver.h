@@ -29,9 +29,10 @@ protected:
 	virtual const std::pair<int, int> selectNextVariable() = 0;
 	virtual const std::vector<int> getValueOrder(const std::pair<int, int> &idx) = 0;
 
-	//utility
+	//utility / expect not to be overwritten
 	virtual bool isAssignComplete();
-	virtual int getNeighbourMask(const std::pair<int, int> &idx);
+	int getNeighbourMask(const std::pair<int, int> &idx);
+	int numberOfSetBits(int i);
 
 private:
 	//helper

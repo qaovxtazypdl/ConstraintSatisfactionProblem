@@ -74,3 +74,10 @@ std::ostream &operator<<(std::ostream &out, const AbstractSudokuSolver &puzzle) 
 	out << (puzzle.isSolved ? "Solved. " : "No Solution. ") << "Visited " << puzzle.nodesVisited << " nodes in " << puzzle.elapsedTime << " microseconds.";
 	return out;
 }
+
+int AbstractSudokuSolver::numberOfSetBits(int i)
+{
+	i = i - ((i >> 1) & 0x55555555);
+	i = (i & 0x33333333) + ((i >> 2) & 0x33333333);
+	return (((i + (i >> 4)) & 0x0F0F0F0F) * 0x01010101) >> 24;
+}

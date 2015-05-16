@@ -3,9 +3,12 @@
 #include "AbstractSudokuSolver.h"
 #include "SudokuSolver_Basic.h"
 #include "SudokuSolver_ForwardChecking.h"
+#include "SudokuSolver_FC_Heuristics.h"
 
 using namespace std;
 //stack instead of recomputing (FC)
+//neighbours
+//zero valids not detected
 
 map<pair<int, int>, int> list2map(vector<int> v) {
 	map<pair<int, int>, int> sudoMap;
@@ -30,8 +33,10 @@ int main() {
 	evil   = { 1, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 8, 1, 0, 2, 0, 6, 3, 0, 5, 0, 0, 0, 0, 0, 7, 0, 3, 9, 0, 0, 0, 0, 0, 0, 5, 8, 0, 4, 6, 0, 0, 0, 0, 0, 0, 2, 5, 0, 4, 0, 0, 0, 0, 0, 1, 0, 8, 7, 0, 2, 0, 8, 9, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 6 };
 
 	initialState = list2map(evil);
-	SudokuSolver_ForwardChecking solver(initialState);
+	SudokuSolver_Basic solver(initialState);
+	SudokuSolver_ForwardChecking solverFC(initialState);
+	SudokuSolver_FC_Heuristics solverFCH(initialState);
 
-	solver.backtrackingSearch();
-	cout << solver << endl;
+	solverFCH.backtrackingSearch();
+	cout << solverFCH << endl;
 }
