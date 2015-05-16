@@ -13,14 +13,14 @@ public:
 
 protected:
 	static const int GRID_WIDTH = 9, GRID_HEIGHT = 9, MAX_VAL = 9;
+	static const int SQUARE_SIZE = 3;
 	static const int TOTAL_ENTRIES = GRID_WIDTH * GRID_HEIGHT;
+
 	std::array<std::array<Variable, GRID_HEIGHT>, GRID_WIDTH> grid;
 	
-	int assignedCount = 0;
+	int assignedCount;
 
 	//constraint checking
 	virtual bool isAssignComplete();
 	virtual bool checkConstraints();
-
-	virtual Variable& getVariable(const std::pair<int, int> &idx);
 };

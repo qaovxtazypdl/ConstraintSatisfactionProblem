@@ -1,18 +1,21 @@
 #pragma once
 #include <vector>
 #include <time.h>
+#include <iostream>
+#include <chrono>
 
 template<class VarIndex, class VarType>
 class ConstraintProblem {
 public:
 	ConstraintProblem() : nodesVisited(0), elapsedTime(0) {
+		srand(std::chrono::system_clock::now().time_since_epoch().count());
 	}
 
 	//main search algorithm
 	virtual bool backtrackingSearch() {
-		unsigned int startTime = (unsigned int)time(NULL);
+		auto startTime = std::chrono::system_clock::now().time_since_epoch().count();
 		bool result = backtrackingSearch_Recursive();
-		elapsedTime = (unsigned int)time(NULL) - startTime;
+		elapsedTime = std::chrono::system_clock::now().time_since_epoch().count() - startTime;
 		return result;
 	};
 
@@ -64,7 +67,7 @@ protected:
 	};
 
 	int nodesVisited;
-	unsigned int elapsedTime;
+	unsigned long elapsedTime;
 
 	//constraint checking
 	virtual bool isAssignComplete() = 0;
@@ -75,7 +78,5 @@ protected:
 	virtual void removeAssign(const VarIndex &selectedVar) = 0;
 	virtual const VarIndex selectNextVariable() = 0;
 	virtual const std::vector<VarType> getValueOrder(const VarIndex &idx) = 0;
-
-	virtual Variable& getVariable(const VarIndex &idx) = 0;
 };
 

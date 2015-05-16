@@ -3,9 +3,7 @@
 #include <time.h>
 #include <iostream>
 
-AbstractSudokuSolver::AbstractSudokuSolver(const std::map<std::pair<int, int>, int> &initialState) : ConstraintProblem() {
-	srand((unsigned int)time(NULL));
-
+AbstractSudokuSolver::AbstractSudokuSolver(const std::map<std::pair<int, int>, int> &initialState) : ConstraintProblem(), assignedCount(0) {
 	//init grid
 	for (int i = 0; i < GRID_WIDTH; i++) {
 		for (int j = 0; j < GRID_HEIGHT; j++) {
@@ -14,7 +12,7 @@ AbstractSudokuSolver::AbstractSudokuSolver(const std::map<std::pair<int, int>, i
 	}
 
 	for (auto it = initialState.begin(); it != initialState.end(); ++it) {
-		getVariable(it->first).assignValue(it->second);
+		grid[it->first.first][it->first.second].assignValue(it->second);
 	}
 }
 
@@ -26,11 +24,40 @@ bool AbstractSudokuSolver::isAssignComplete() {
 }
 
 bool AbstractSudokuSolver::checkConstraints() {
-	return true;
-}
+	//check rows
+	for (int i = 0; i < GRID_WIDTH; i++) {
+		int unique9 = 0;
+		for (int j = 0; j < GRID_HEIGHT; j++) {
+			int mask = 0x1 << (grid[i][j].getValue() - 1);
+			if (grid[i][j].isAssigned() && (unique9 & mask)) return false;
+			else unique9 |= mask;
+		}
+	}
+	
+	//check cols
+	for (int j = 0; j < GRID_HEIGHT; j++) {
+		int unique9 = 0;
+		for (int i = 0; i < GRID_WIDTH; i++) {
+			int mask = 0x1 << (grid[i][j].getValue() - 1);
+			if (grid[i][j].isAssigned() && (unique9 & mask)) return false;
+			else unique9 |= mask;
+		}
+	}
 
-AbstractSudokuSolver::Variable& AbstractSudokuSolver::getVariable(const std::pair<int, int> &idx) {
-	return grid[idx.first][idx.second];
+	//check squares
+	for (int outeri = 0; outeri < GRID_WIDTH; outeri += SQUARE_SIZE) {
+		for (int outerj = 0; outerj < GRID_HEIGHT; outerj += SQUARE_SIZE) {
+			int unique9 = 0;
+			for (int i = 0; i < SQUARE_SIZE; i++) {
+				for (int j = 0; j < SQUARE_SIZE; j++) {
+					int mask = 0x1 << (grid[outeri + i][outerj + j].getValue() - 1);
+					if (grid[outeri + i][outerj + j].isAssigned() && (unique9 & mask)) return false;
+					else unique9 |= mask;
+				}
+			}
+		}
+	}
+	return true;
 }
 
 std::ostream &operator<<(std::ostream &out, const AbstractSudokuSolver &puzzle) {
@@ -40,6 +67,6 @@ std::ostream &operator<<(std::ostream &out, const AbstractSudokuSolver &puzzle) 
 		}
 		std::cout << std::endl;
 	}
-	std::cout << "The backtracking algorithm visited " << puzzle.nodesVisited << " nodes in " << puzzle.elapsedTime << "ms.";
+	std::cout << "The backtracking algorithm visited " << puzzle.nodesVisited << " nodes in " << puzzle.elapsedTime << "ns.";
 	return out;
 }
