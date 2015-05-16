@@ -18,7 +18,6 @@ map<PairIndex, int> list2map(vector<int> v) {
 	return sudokuMap;
 }
 
-
 int main() {
 	map<PairIndex, int> initialState;
 

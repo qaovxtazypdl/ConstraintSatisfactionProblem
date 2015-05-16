@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <chrono>
+#include <windows.h>
 
 template<class VarIndex, class VarType>
 class ConstraintProblem {
@@ -14,7 +15,7 @@ public:
 
 	//main search algorithm
 	virtual bool backtrackingSearch() {
-		auto startTime = getTimeInMicroseconds();
+		unsigned long startTime = getTimeInMicroseconds();
 		bool result = backtrackingSearch_Recursive();
 		elapsedTime = getTimeInMicroseconds() - startTime;
 		isSolved = result;
@@ -69,11 +70,6 @@ protected:
 		}
 	};
 
-	//utility
-	unsigned long getTimeInMicroseconds() {
-		return (unsigned long)std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-	}
-
 	unsigned long nodesVisited;
 	unsigned long elapsedTime;
 	bool isSolved;
@@ -87,5 +83,15 @@ protected:
 	virtual void removeAssign(const VarIndex &selectedVar) = 0;
 	virtual const VarIndex selectNextVariable() = 0;
 	virtual const std::vector<VarType> getValueOrder(const VarIndex &idx) = 0;
+
+	unsigned long getTimeInMicroseconds()
+	{
+		LARGE_INTEGER li;
+		QueryPerformanceFrequency(&li);
+		double PCFreq = double(li.QuadPart) / 1000000.0;
+
+		QueryPerformanceCounter(&li);
+		return (unsigned long)(li.QuadPart / PCFreq);
+	}
 };
 

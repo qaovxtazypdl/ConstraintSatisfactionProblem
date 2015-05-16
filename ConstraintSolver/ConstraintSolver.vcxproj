@@ -68,6 +68,7 @@
   <ItemGroup>
     <ClInclude Include="AbstractSudokuSolver.h" />
     <ClInclude Include="ConstraintProblem.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="SudokuSolver_Basic.h" />
     <ClInclude Include="SudokuSolver_FC_Heuristics.h" />
     <ClInclude Include="SudokuSolver_ForwardChecking.h" />
@@ -78,6 +79,9 @@
     <ClCompile Include="SudokuSolver_Basic.cpp" />
     <ClCompile Include="SudokuSolver_FC_Heuristics.cpp" />
     <ClCompile Include="SudokuSolver_ForwardChecking.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ConstraintSolver.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
