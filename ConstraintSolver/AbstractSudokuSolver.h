@@ -38,6 +38,7 @@ protected:
 	virtual bool isAssignComplete();
 	int getNeighbourMask(const PairIndex &idx);
 	int numberOfSetBits(int i);
+	void shuffle(std::vector<int> &vect);
 
 private:
 	//helper

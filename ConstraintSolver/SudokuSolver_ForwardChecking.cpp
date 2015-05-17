@@ -52,8 +52,7 @@ const std::vector<int> SudokuSolver_ForwardChecking::getValueOrder(const PairInd
 			validValues.push_back(i);
 		}
 	}
-	shuffle(validValues.begin(), validValues.end(), std::default_random_engine(getTimeInMicroseconds()));
-
+	shuffle(validValues);
 	return validValues;
 }
 

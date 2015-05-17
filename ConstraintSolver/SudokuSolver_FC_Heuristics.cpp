@@ -77,7 +77,7 @@ const std::vector<int> SudokuSolver_FC_Heuristics::getValueOrder(const PairIndex
 		}
 	}
 	//randomize the order of checking to randomly break any ties at the end.
-	shuffle(validValues.begin(), validValues.end(), std::default_random_engine(getTimeInMicroseconds()));
+	shuffle(validValues);
 
 	//H: least constraining value heuristic
 	int seen = 0;

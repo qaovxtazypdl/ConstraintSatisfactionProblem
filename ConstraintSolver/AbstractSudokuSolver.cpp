@@ -78,3 +78,12 @@ int AbstractSudokuSolver::numberOfSetBits(int i)
 	i = (i & 0x33333333) + ((i >> 2) & 0x33333333);
 	return (((i + (i >> 4)) & 0x0F0F0F0F) * 0x01010101) >> 24;
 }
+
+void AbstractSudokuSolver::shuffle(std::vector<int> &vect) {
+	for (int i = vect.size() - 1; i >= 0; i--) {
+		int swapidx = rand() % (i + 1);
+		int temp = vect[swapidx];
+		vect[swapidx] = vect[i];
+		vect[i] = temp;
+	}
+}

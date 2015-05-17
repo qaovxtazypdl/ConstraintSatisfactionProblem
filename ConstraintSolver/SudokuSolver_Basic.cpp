@@ -45,8 +45,7 @@ const std::vector<int> SudokuSolver_Basic::getValueOrder(const PairIndex &idx) {
 		validValues.push_back(i);
 	}
 
-	shuffle(validValues.begin(), validValues.end(), std::default_random_engine(getTimeInMicroseconds()));
-
+	shuffle(validValues);
 	return validValues;
 }
 
