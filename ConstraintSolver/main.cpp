@@ -7,7 +7,7 @@
 
 using namespace std;
 
-map<PairIndex, int> list2map(vector<int> v) {
+map<PairIndex, int> list2map(const vector<int> &v) {
 	map<PairIndex, int> sudokuMap;
 	int count = 0;
 	for each(int i in v) {
