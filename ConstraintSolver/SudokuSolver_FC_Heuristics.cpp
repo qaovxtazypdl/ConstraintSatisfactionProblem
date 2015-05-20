@@ -26,7 +26,6 @@ SudokuSolver_FC_Heuristics::SudokuSolver_FC_Heuristics(const std::map<PairIndex,
 SudokuSolver_FC_Heuristics::~SudokuSolver_FC_Heuristics() {
 }
 
-//RANDOMLY selects a variable out of the remaining unassigned ones.
 const PairIndex SudokuSolver_FC_Heuristics::selectNextVariable() {
 	//H: most constrained variable heuristic
 	int fewestLegals = INT_MAX;
@@ -47,7 +46,6 @@ const PairIndex SudokuSolver_FC_Heuristics::selectNextVariable() {
 		}
 	}
 	if (mostConstrained.size() == 1) return mostConstrained[0];
-	//something has gone horribly wrong.
 	else if (mostConstrained.size() == 0) return PairIndex(-1, -1);
 
 	//H: most constraining variable heuristic to break ties.
@@ -64,22 +62,22 @@ const PairIndex SudokuSolver_FC_Heuristics::selectNextVariable() {
 		}
 	}
 
-	//something has gone horribly wrong.
 	if (mostConstraining.size() == 0) return PairIndex(-1, -1);
 	else {
-		//return an index at random.
+		//RANDOM: break tie randomly
 		return mostConstraining[rand() % mostConstraining.size()];
 	}
 }
 
 const std::vector<int> SudokuSolver_FC_Heuristics::getValueOrder(const PairIndex &idx) {
+	//FC: get list of valid values
 	std::vector<int> validValues;
 	for (int i = 1; i <= MAX_VAL; i++) {
 		if (legalValues[idx.first][idx.second] & (0x1 << (i - 1))) {
 			validValues.push_back(i);
 		}
 	}
-	//randomize the order of checking to randomly break any ties at the end.
+	//RANDOM: randomize order
 	shuffle(validValues);
 
 	//H: least constraining value heuristic
@@ -97,7 +95,6 @@ const std::vector<int> SudokuSolver_FC_Heuristics::getValueOrder(const PairIndex
 			}
 		}
 
-		//insert values into a linked list in stable order (same ruledOut values are sorted by order in validValues, which is random)
 		int priority = ruledOut * 10 + seen;
 
 		auto listIt = minPriorityList.begin();
@@ -118,7 +115,7 @@ bool SudokuSolver_FC_Heuristics::checkConstraints(const PairIndex &idx, const in
 	bool checkBase = AbstractSudokuSolver::checkConstraints(idx, value);
 	if (checkBase == false) return false;
 
-	//check the forward checking condition - check the variables that potentially are updated only.
+	//FC: check the forward checking condition - check the variables that potentially are updated only.
 	auto neighboring = neighbours[idx.first][idx.second];
 	for (auto it = neighboring.begin(); it != neighboring.end(); ++it) {
 		if (!grid[it->first][it->second].isAssigned() && legalValues[it->first][it->second] == (0x1 << (value - 1))) {
@@ -128,11 +125,11 @@ bool SudokuSolver_FC_Heuristics::checkConstraints(const PairIndex &idx, const in
 	return true;
 }
 
-//selection of variable and value
 void SudokuSolver_FC_Heuristics::assignValue(const PairIndex &idx, const int &value) {
 	grid[idx.first][idx.second].assignValue(value);
 	assignedCount++;
-
+	
+	//FC: update legal values states
 	auto neighboring = neighbours[idx.first][idx.second];
 	for (auto it = neighboring.begin(); it != neighboring.end(); ++it) {
 		if (++constraintsApplied[it->first][it->second][value - 1] == 1) {
@@ -146,6 +143,7 @@ void SudokuSolver_FC_Heuristics::removeAssign(const PairIndex &idx) {
 	grid[idx.first][idx.second].removeAssign();
 	assignedCount--;
 
+	//FC: update legal values states
 	auto neighboring = neighbours[idx.first][idx.second];
 	for (auto it = neighboring.begin(); it != neighboring.end(); ++it) {
 		if (--constraintsApplied[it->first][it->second][value - 1] == 0) {

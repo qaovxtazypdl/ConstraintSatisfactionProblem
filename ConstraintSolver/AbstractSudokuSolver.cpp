@@ -20,7 +20,6 @@ const std::vector<PairIndex> AbstractSudokuSolver::getNeighbours(const PairIndex
 		}
 	}
 
-	//get rid of values in the verticals
 	for (int i = 0; i < GRID_WIDTH; i++) {
 		if (idx.first != i) {
 			neighbours.push_back(PairIndex(i, idx.second));

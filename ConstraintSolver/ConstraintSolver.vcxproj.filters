@@ -30,9 +30,6 @@
     <ClInclude Include="SudokuSolver_FC_Heuristics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SudokuSolver_Basic.cpp">
@@ -50,10 +47,5 @@
     <ClCompile Include="SudokuSolver_FC_Heuristics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="ConstraintSolver.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
   </ItemGroup>
 </Project>

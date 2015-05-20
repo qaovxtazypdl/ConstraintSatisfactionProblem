@@ -16,8 +16,8 @@ SudokuSolver_Basic::SudokuSolver_Basic(const std::map<PairIndex, int> &initialSt
 SudokuSolver_Basic::~SudokuSolver_Basic() {
 }
 
-//RANDOMLY selects a variable out of the remaining unassigned ones.
 const PairIndex SudokuSolver_Basic::selectNextVariable() {
+	//RANDOM: get random unassigned variable
 	int select = rand() % (TOTAL_ENTRIES - assignedCount);
 	int curCount = 0;
 
@@ -34,22 +34,19 @@ const PairIndex SudokuSolver_Basic::selectNextVariable() {
 		}
 	}
 
-	//something has gone horribly wrong
 	return PairIndex(-1, -1);
 }
 
-//RANDOMLY order the array 1-9.
 const std::vector<int> SudokuSolver_Basic::getValueOrder(const PairIndex &idx) {
 	std::vector<int> validValues;
 	for (int i = 1; i <= MAX_VAL; i++) {
 		validValues.push_back(i);
 	}
-
+	//RANDOM: randomly selects value
 	shuffle(validValues);
 	return validValues;
 }
 
-//selection of variable and value
 void SudokuSolver_Basic::assignValue(const PairIndex &idx, const int &value) {
 	grid[idx.first][idx.second].assignValue(value);
 	assignedCount++;

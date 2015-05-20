@@ -25,8 +25,8 @@ SudokuSolver_ForwardChecking::SudokuSolver_ForwardChecking(const std::map<PairIn
 SudokuSolver_ForwardChecking::~SudokuSolver_ForwardChecking() {
 }
 
-//RANDOMLY selects a variable out of the remaining unassigned ones.
 const PairIndex SudokuSolver_ForwardChecking::selectNextVariable() {
+	//RANDOM: get random unassigned variable
 	int select = rand() % (TOTAL_ENTRIES - assignedCount);
 	int curCount = 0;
 
@@ -43,18 +43,18 @@ const PairIndex SudokuSolver_ForwardChecking::selectNextVariable() {
 		}
 	}
 
-	//something has gone horribly wrong
 	return PairIndex(-1, -1);
 }
 
-//RANDOMLY order the array 1-9.
 const std::vector<int> SudokuSolver_ForwardChecking::getValueOrder(const PairIndex &idx) {
+	//FC: get list of valid values
 	std::vector<int> validValues;
 	for (int i = 1; i <= MAX_VAL; i++) {
 		if (legalValues[idx.first][idx.second] & (0x1 << (i - 1))) {
 			validValues.push_back(i);
 		}
 	}
+	//RANDOM: randomize order
 	shuffle(validValues);
 	return validValues;
 }
@@ -63,7 +63,7 @@ bool SudokuSolver_ForwardChecking::checkConstraints(const PairIndex &idx, const 
 	bool checkBase = AbstractSudokuSolver::checkConstraints(idx, value);
 	if (checkBase == false) return false;
 
-	//check the forward checking condition - check the variables that potentially are updated only.
+	//FC: check the forward checking condition - check the variables that potentially are updated only.
 	auto neighboring = neighbours[idx.first][idx.second];
 	for (auto it = neighboring.begin(); it != neighboring.end(); ++it) {
 		if (!grid[it->first][it->second].isAssigned() && legalValues[it->first][it->second] == (0x1 << (value - 1))) {
@@ -74,11 +74,11 @@ bool SudokuSolver_ForwardChecking::checkConstraints(const PairIndex &idx, const 
 	return true;
 }
 
-//selection of variable and value
 void SudokuSolver_ForwardChecking::assignValue(const PairIndex &idx, const int &value) {
 	grid[idx.first][idx.second].assignValue(value);
 	assignedCount++;
 
+	//FC: update legal values states
 	auto neighboring = neighbours[idx.first][idx.second];
 	for (auto it = neighboring.begin(); it != neighboring.end(); ++it) {
 		if (++constraintsApplied[it->first][it->second][value - 1] == 1) {
@@ -92,6 +92,7 @@ void SudokuSolver_ForwardChecking::removeAssign(const PairIndex &idx) {
 	grid[idx.first][idx.second].removeAssign();
 	assignedCount--;
 
+	//FC: update legal values states
 	auto neighboring = neighbours[idx.first][idx.second];
 	for (auto it = neighboring.begin(); it != neighboring.end(); ++it) {
 		if (--constraintsApplied[it->first][it->second][value - 1] == 0) {
