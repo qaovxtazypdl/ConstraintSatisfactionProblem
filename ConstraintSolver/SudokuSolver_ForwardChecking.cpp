@@ -8,6 +8,9 @@ SudokuSolver_ForwardChecking::SudokuSolver_ForwardChecking(const std::map<PairIn
 	for (int i = 0; i < GRID_WIDTH; i++) {
 		for (int j = 0; j < GRID_HEIGHT; j++) {
 			legalValues[i][j] = MAX_BIT_MASK;
+			for (int k = 0; k < MAX_VAL; k++) {
+				constraintsApplied[i][j][k] = 0;
+			}
 		}
 	}
 
@@ -73,26 +76,26 @@ bool SudokuSolver_ForwardChecking::checkConstraints(const PairIndex &idx, const 
 
 //selection of variable and value
 void SudokuSolver_ForwardChecking::assignValue(const PairIndex &idx, const int &value) {
-
 	grid[idx.first][idx.second].assignValue(value);
 	assignedCount++;
 
-	int mask = 0x1 << (value - 1);
 	auto neighboring = neighbours[idx.first][idx.second];
 	for (auto it = neighboring.begin(); it != neighboring.end(); ++it) {
-		legalValues[it->first][it->second] &= ~mask;
+		if (++constraintsApplied[it->first][it->second][value - 1] == 1) {
+			legalValues[it->first][it->second] &= ~(0x1 << (value - 1));
+		}
 	}
 }
 
 void SudokuSolver_ForwardChecking::removeAssign(const PairIndex &idx) {
+	int value = grid[idx.first][idx.second].getValue();
 	grid[idx.first][idx.second].removeAssign();
 	assignedCount--;
 
-	//recompute neighbouring masks.
 	auto neighboring = neighbours[idx.first][idx.second];
 	for (auto it = neighboring.begin(); it != neighboring.end(); ++it) {
-		int neighbourMask = getNeighbourMask(*it);
-		legalValues[it->first][it->second] = ~neighbourMask & MAX_BIT_MASK;
+		if (--constraintsApplied[it->first][it->second][value - 1] == 0) {
+			legalValues[it->first][it->second] |= (0x1 << (value - 1));
+		}
 	}
 }
-

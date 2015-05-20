@@ -29,12 +29,12 @@ int main() {
 	hard   = { 6, 0, 0, 8, 0, 9, 0, 0, 0, 0, 0, 5, 0, 0, 7, 0, 8, 6, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 1, 3, 0, 7, 8, 0, 1, 0, 0, 0, 5, 0, 4, 7, 0, 9, 2, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 1, 8, 0, 5, 0, 0, 6, 0, 0, 0, 0, 0, 3, 0, 4, 0, 0, 5 };
 	evil   = { 1, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 8, 1, 0, 2, 0, 6, 3, 0, 5, 0, 0, 0, 0, 0, 7, 0, 3, 9, 0, 0, 0, 0, 0, 0, 5, 8, 0, 4, 6, 0, 0, 0, 0, 0, 0, 2, 5, 0, 4, 0, 0, 0, 0, 0, 1, 0, 8, 7, 0, 2, 0, 8, 9, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 6 };
 
-	initialState = list2map(easy);
+	initialState = list2map(evil);
 
 	//ConstraintProblem<PairIndex, int> *solver = new SudokuSolver_Basic(initialState);
 	//ConstraintProblem<PairIndex, int> *solver = new SudokuSolver_ForwardChecking(initialState);
 	//ConstraintProblem<PairIndex, int> *solver = new SudokuSolver_FC_Heuristics(initialState);
-	ConstraintProblem<PairIndex, int> *solver = new SudokuSolver_Basic(initialState);
+	ConstraintProblem<PairIndex, int> *solver = new SudokuSolver_FC_Heuristics(initialState);
 	solver->backtrackingSearch();
 	solver->printResult();
 	delete solver;

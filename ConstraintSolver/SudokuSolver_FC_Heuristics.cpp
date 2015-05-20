@@ -9,6 +9,9 @@ SudokuSolver_FC_Heuristics::SudokuSolver_FC_Heuristics(const std::map<PairIndex,
 	for (int i = 0; i < GRID_WIDTH; i++) {
 		for (int j = 0; j < GRID_HEIGHT; j++) {
 			legalValues[i][j] = MAX_BIT_MASK;
+			for (int k = 0; k < MAX_VAL; k++) {
+				constraintsApplied[i][j][k] = 0;
+			}
 		}
 	}
 
@@ -85,12 +88,11 @@ const std::vector<int> SudokuSolver_FC_Heuristics::getValueOrder(const PairIndex
 	for (auto validValueIt = validValues.begin(); validValueIt != validValues.end(); ++validValueIt) {
 		seen++;
 		int i = *validValueIt;
-		int mask = 0x1 << (i - 1);
 		int ruledOut = 0;
 
 		auto neighboring = neighbours[idx.first][idx.second];
 		for (auto it = neighboring.begin(); it != neighboring.end(); ++it) {
-			if (!grid[it->first][it->second].isAssigned() && (legalValues[it->first][it->second] & mask)) {
+			if (!grid[it->first][it->second].isAssigned() && (legalValues[it->first][it->second] & 0x1 << (i - 1))) {
 				ruledOut++;
 			}
 		}
@@ -131,21 +133,24 @@ void SudokuSolver_FC_Heuristics::assignValue(const PairIndex &idx, const int &va
 	grid[idx.first][idx.second].assignValue(value);
 	assignedCount++;
 
-	int mask = 0x1 << (value - 1);
 	auto neighboring = neighbours[idx.first][idx.second];
 	for (auto it = neighboring.begin(); it != neighboring.end(); ++it) {
-		legalValues[it->first][it->second] &= ~mask;
+		if (++constraintsApplied[it->first][it->second][value - 1] == 1) {
+			legalValues[it->first][it->second] &= ~(0x1 << (value - 1));
+		}
 	}
 }
 
 void SudokuSolver_FC_Heuristics::removeAssign(const PairIndex &idx) {
+	int value = grid[idx.first][idx.second].getValue();
 	grid[idx.first][idx.second].removeAssign();
 	assignedCount--;
 
 	auto neighboring = neighbours[idx.first][idx.second];
 	for (auto it = neighboring.begin(); it != neighboring.end(); ++it) {
-		int neighbourMask = getNeighbourMask(*it);
-		legalValues[it->first][it->second] = ~neighbourMask & MAX_BIT_MASK;
+		if (--constraintsApplied[it->first][it->second][value - 1] == 0) {
+			legalValues[it->first][it->second] |= (0x1 << (value - 1));
+		}
 	}
 }
 

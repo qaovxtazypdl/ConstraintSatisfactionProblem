@@ -9,6 +9,7 @@ public:
 	virtual ~SudokuSolver_ForwardChecking();
 protected:
 	std::array<std::array<int, GRID_HEIGHT>, GRID_WIDTH> legalValues;
+	std::array<std::array<std::array<int, MAX_VAL>, GRID_HEIGHT>, GRID_WIDTH> constraintsApplied;
 
 	//selection of variable and value
 	virtual const PairIndex selectNextVariable();
