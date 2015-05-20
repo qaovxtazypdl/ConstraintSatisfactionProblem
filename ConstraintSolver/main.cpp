@@ -6,7 +6,6 @@
 #include "SudokuSolver_FC_Heuristics.h"
 
 using namespace std;
-//zero valids not detected
 
 map<PairIndex, int> list2map(vector<int> v) {
 	map<PairIndex, int> sudokuMap;
